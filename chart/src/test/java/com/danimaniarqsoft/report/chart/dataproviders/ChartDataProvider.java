@@ -1,8 +1,6 @@
-package com.danimaniarqsoft.report.chart.config;
+package com.danimaniarqsoft.report.chart.dataproviders;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -15,37 +13,35 @@ import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-import org.junit.runners.Parameterized.Parameters;
+import org.testng.annotations.DataProvider;
 
 import com.danimaniarqsoft.report.chart.model.Persona;
 
-public abstract class AbstractJfreeChartTest extends AbstractParameterizedTest {
+public class ChartDataProvider {
 
-	@Parameters
-	public static Collection<Object[]> data() {
-		return Arrays.asList(new Object[][] {
-				{ createPieDataset(), getCategoryDataset(), createDataSet(),
-						createPersonaDataset() }, { "exmaple@example.com" }, });
+	@DataProvider(name = "crearDataSet")
+	public static Object[][] crearDataSet() {
+		return new Object[][] { { createPieDataset(), getCategoryDataset(), createDataSet(), createPersonaDataset() } };
 	}
 
 	public static XYSeriesCollection createDataSet() {
 		/* Define some XY Data series for the chart */
-	        int initYear = 1990;
-	        int maxData = 100;
+		int initYear = 1990;
+		int maxData = 100;
 		XYSeries team1_xy_data = new XYSeries("Team 1");
-		for (int i = 1990; i < initYear+maxData; i++) {
-		    team1_xy_data.add(Double.valueOf(String.valueOf(i)).doubleValue(), getRandomDouble());                    
-                }
+		for (int i = 1990; i < initYear + maxData; i++) {
+			team1_xy_data.add(Double.valueOf(String.valueOf(i)).doubleValue(), getRandomDouble());
+		}
 		XYSeries team2_xy_data = new XYSeries("Team 2");
-		for (int i = 1990; i < initYear+maxData; i++) {
-		    team2_xy_data.add(Double.valueOf(String.valueOf(i)).doubleValue(), getRandomDouble());
-                }
+		for (int i = 1990; i < initYear + maxData; i++) {
+			team2_xy_data.add(Double.valueOf(String.valueOf(i)).doubleValue(), getRandomDouble());
+		}
 
 		XYSeries team3_xy_data = new XYSeries("Team 3");
-		for (int i = 1990; i < initYear+maxData; i++) {
-		    team3_xy_data.add(Double.valueOf(String.valueOf(i)).doubleValue(), getRandomDouble());
-	        }
-		
+		for (int i = 1990; i < initYear + maxData; i++) {
+			team3_xy_data.add(Double.valueOf(String.valueOf(i)).doubleValue(), getRandomDouble());
+		}
+
 		/* Add all XYSeries to XYSeriesCollection */
 		// XYSeriesCollection implements XYDataset
 		XYSeriesCollection my_data_series = new XYSeriesCollection();
@@ -116,12 +112,12 @@ public abstract class AbstractJfreeChartTest extends AbstractParameterizedTest {
 		personas.add(new Persona("Ronaldhino", 34, 84.659, new Date()));
 		return personas;
 	}
-	
-	
-	private static double getRandomDouble(){
-	    int rangeMin=10;
-	    int rangeMax=100;
-	    Random r = new Random();
-	    return rangeMin + (rangeMax - rangeMin) * r.nextDouble();
+
+	private static double getRandomDouble() {
+		int rangeMin = 10;
+		int rangeMax = 100;
+		Random r = new Random();
+		return rangeMin + (rangeMax - rangeMin) * r.nextDouble();
 	}
+
 }

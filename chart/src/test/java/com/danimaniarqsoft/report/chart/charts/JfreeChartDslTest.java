@@ -17,10 +17,11 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.general.PieDataset;
 import org.jfree.data.xy.XYDataset;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.testng.annotations.Test;
 
-import com.danimaniarqsoft.report.chart.config.AbstractJfreeChartTest;
+import com.danimaniarqsoft.report.chart.dataproviders.ChartDataProvider;
 import com.danimaniarqsoft.report.chart.model.Persona;
 
 /**
@@ -29,33 +30,30 @@ import com.danimaniarqsoft.report.chart.model.Persona;
  * @author Daniel Cortes Pichardo
  * 
  */
-public class JfreeChartDslTest extends AbstractJfreeChartTest {
+public class JfreeChartDslTest {
+	private static final Logger LOG = LoggerFactory.getLogger(JfreeChartDslTest.class);
 
 	private PieDataset pieDataset;
 	private CategoryDataset barDataset;
 	private XYDataset xyDataset;
 	private List<Persona> personasDataset;
 
-	public JfreeChartDslTest(PieDataset pieDataset, CategoryDataset barDataset,
-			XYDataset xyDataset, List<Persona> personasDataset) {
-		this.pieDataset = pieDataset;
-		this.barDataset = barDataset;
-		this.xyDataset = xyDataset;
-		this.personasDataset = personasDataset;
-	}
-
 	/**
 	 * Pie Chart Test
 	 * 
 	 * @throws IOException
 	 */
-	@Test
-	public void pieChartTest() throws IOException {
-		JFreeChart chart = createChart().ofTypePieChart().withXAxisLabel("X")
-				.withYAxisLabel("Y").withChartTitle("01Pie Chart")
-				.addDataSet(pieDataset).createChart();
-		ChartUtilities.saveChartAsJPEG(new File("PieChart.jpg"), chart, 500,
-				300);
+
+	@Test(dataProvider = "crearDataSet", dataProviderClass = ChartDataProvider.class)
+	public void pieChartTest(PieDataset pieDataset, CategoryDataset barDataset, XYDataset xyDataset,
+			List<Persona> personasDataset) throws IOException {
+		this.pieDataset = pieDataset;
+		this.barDataset = barDataset;
+		this.xyDataset = xyDataset;
+		this.personasDataset = personasDataset;
+		JFreeChart chart = createChart().ofTypePieChart().withXAxisLabel("X").withYAxisLabel("Y")
+				.withChartTitle("01Pie Chart").addDataSet(pieDataset).createChart();
+		ChartUtilities.saveChartAsJPEG(new File("PieChart.jpg"), chart, 500, 300);
 	}
 
 	/**
@@ -63,15 +61,11 @@ public class JfreeChartDslTest extends AbstractJfreeChartTest {
 	 * 
 	 * @throws IOException
 	 */
-
-	@Ignore
-	@Test
+	@Test(enabled = false)
 	public void barChartTest() throws IOException {
-		JFreeChart chart = createChart().ofTypeBarChart().withXAxisLabel("X")
-				.withYAxisLabel("Y").withChartTitle("02Bar chart")
-				.addDataSet(barDataset).createChart();
-		ChartUtilities.saveChartAsJPEG(new File("BarChart.jpg"), chart, 500,
-				300);
+		JFreeChart chart = createChart().ofTypeBarChart().withXAxisLabel("X").withYAxisLabel("Y")
+				.withChartTitle("02Bar chart").addDataSet(barDataset).createChart();
+		ChartUtilities.saveChartAsJPEG(new File("BarChart.jpg"), chart, 500, 300);
 	}
 
 	/**
@@ -79,16 +73,12 @@ public class JfreeChartDslTest extends AbstractJfreeChartTest {
 	 * 
 	 * @throws IOException
 	 */
-	@Ignore
-	@Test
+	@Test(enabled = false)
 	public void lineChartTest() throws IOException {
 		try {
-			JFreeChart chart = createChart().ofTypeLineChart()
-					.withXAxisLabel("X").withYAxisLabel("Y")
-					.withChartTitle("03Line chart").addDataSet(barDataset)
-					.createChart();
-			ChartUtilities.saveChartAsJPEG(new File("LineChart.jpg"), chart,
-					500, 300);
+			JFreeChart chart = createChart().ofTypeLineChart().withXAxisLabel("X").withYAxisLabel("Y")
+					.withChartTitle("03Line chart").addDataSet(barDataset).createChart();
+			ChartUtilities.saveChartAsJPEG(new File("LineChart.jpg"), chart, 500, 300);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -99,15 +89,12 @@ public class JfreeChartDslTest extends AbstractJfreeChartTest {
 	 * 
 	 * @throws IOException
 	 */
-	@Test
+	@Test(enabled = false)
 	public void lineXYTest() throws IOException {
 		try {
-			JFreeChart chart = createChart().ofTypeXYPlotChart()
-					.withXAxisLabel("X").withYAxisLabel("Y")
-					.withChartTitle("04XY chart").addDataSet(xyDataset)
-					.createChart();
-			ChartUtilities.saveChartAsJPEG(new File("XYChart.jpg"), chart,
-					5000, 300);
+			JFreeChart chart = createChart().ofTypeXYPlotChart().withXAxisLabel("X").withYAxisLabel("Y")
+					.withChartTitle("04XY chart").addDataSet(xyDataset).createChart();
+			ChartUtilities.saveChartAsJPEG(new File("XYChart.jpg"), chart, 5000, 300);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -118,15 +105,12 @@ public class JfreeChartDslTest extends AbstractJfreeChartTest {
 	 * 
 	 * @throws IOException
 	 */
-	@Test
+	@Test(enabled = false)
 	public void reflectionTest() throws IOException {
 		try {
-			JFreeChart chart = createChart().ofTypeXYPlotChart()
-					.withXAxisLabel("X-edad").withYAxisLabel("Y-cantidad")
-					.withChartTitle("Reflection")
-					.addDataSet(personasDataset, Persona.class).createChart();
-			ChartUtilities.saveChartAsJPEG(new File("ReflectionChart.jpg"),
-					chart, 500, 300);
+			JFreeChart chart = createChart().ofTypeXYPlotChart().withXAxisLabel("X-edad").withYAxisLabel("Y-cantidad")
+					.withChartTitle("Reflection").addDataSet(personasDataset, Persona.class).createChart();
+			ChartUtilities.saveChartAsJPEG(new File("ReflectionChart.jpg"), chart, 500, 300);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
